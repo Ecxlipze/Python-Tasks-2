@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'tasks',
     'rest_framework',
     'accounts',
+    'django_filters',
+    'audit',
 ]
 
 MIDDLEWARE = [
@@ -107,8 +109,25 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticated",
+    ),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 5,
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
+        "rest_framework.filters.OrderingFilter",
+    ],
+    "DEFAULT_THROTTLE_CLASSES": [
+    "rest_framework.throttling.AnonRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+    "anon": "5/minute",
+    },
 }
 
+CELERY_BROKER_URL = "redis://localhost:6379/0"
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/

@@ -18,9 +18,15 @@ class TaskViewSet(viewsets.ModelViewSet):
         user = self.request.user
 
         if user.profile.role == Profile.Role.ADMIN:
-            return Task.objects.all()
-
-        return Task.objects.filter(
+            return Task.objects.select_related(
+                "assigned_to",
+                "project",
+            ).all()
+            
+        return Task.objects.select_related(
+            "assigned_to",
+            "project",
+        ).filter(
             assigned_to=user
         )
 
